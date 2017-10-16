@@ -66,14 +66,15 @@ var _draw_stat_table = function (_result) {
                                         // 如果是數值
                                         _value = parseFloat(_value, 10);
                                         
-                                        if (typeof(_full_data[_attr]) === "undefined") {
-                                                _full_data[_attr] = [];
+                                        if (typeof(_full_data[_attr]) !== "object" || typeof(_full_data[_attr].push) === "undefined") {
+                                            _full_data[_attr] = [];
                                         }
+                                        console.log([_attr, typeof(_full_data[_attr]), typeof(_full_data[_attr].push)]);
                                         _full_data[_attr].push(_value);
                                         
                                         // --------------
                                         
-                                        if (typeof(_cluster_data[_cluster][_attr]) === "undefined") {
+                                        if (typeof(_cluster_data[_cluster][_attr]) === "undefined" || typeof(_cluster_data[_cluster][_attr].push) === "undefined") {
                                                 _cluster_data[_cluster][_attr] = [];
                                         }
                                         _cluster_data[_cluster][_attr].push(_value);

@@ -367,7 +367,7 @@ var _load_file = function(evt) {
 
                         var _auto_download = (_panel.find('[name="autodownload"]:checked').length === 1);
                         if (_auto_download === true) {
-                                _panel.find(".download-file").click();
+                            _panel.find(".download-file").click();
                         }
                         
                         //_download_file(_result, _file_name, "txt");
@@ -420,12 +420,105 @@ var _load_textarea = function(evt) {
 };
 
 var _download_file_button = function () {
-        var _panel = $(".file-process-framework");
+    var _panel = $(".file-process-framework");
+
+    var _file_name = _panel.find(".filename").val().trim();
+    var _data = _panel.find(".preview").val().trim();
+
+    _download_file(_data, _file_name, "csv");
+};
+
+var _download_numeric_variables_button = function () {
+    var _panel = $(".file-process-framework");
+
+    var _file_name = _panel.find(".filename").val().trim();
+    _file_name = "numeric-" + _file_name;
+    var _data = _panel.find(".preview").val().trim();
+
+    // -----------------------
+    
+    var _fields_type = [];
+    
+    var _lines = _data.split("\n");
+    var _fields_name = _lines[0].split(",");
+    var _fields_value = {};
+    var _count = (_lines.length-1);
+    
+    for (var _i = 1; _i < _lines.length; _i++) {
+        var _values = _lines[_i].split(",");
+        for (var _j = 0; _j < _values.length; _j++) {
+            var _value = _values[_j];
+            //console.log(_value);
+            if (_value !== "?" && typeof(_fields_type[_j]) === "undefined") {
+                var _is_numeric = isNaN(_value);
+                _fields_type[_j] = _is_numeric;
+            }
+            
+            if (typeof(_fields_value[_j]) === "undefined") {
+                _fields_value[_j] = [];
+            }
+            _fields_value[_j][(_i-1)] = _value;
+        }
+    }
+    
+    //console.log(_fields_value);
+    
+    // -------------------------------------
+    
+    // 好了，我們把資料切割完了
+    
+    _data = [];
+    
+    var _line = [];
+    for (var _i = 0; _i < _fields_type.length; _i++) {
+        var _name = _fields_name[_i];
+        if (_fields_type[_i] === false || _name === "cluster") {
+            // 如果是數字
+            if (_name !== 'cluster') {
+                _name = 'var' + _i;
+            }
+            
+            _line.push(_name);
+        }
+    }
+    _data.push(_line.join(","));
+    
+    for (var _i = 0; _i < _fields_value[0].length; _i++) {
+        _line = [];
+        var _lost_data = false;
+        for (var _j = 0; _j < _fields_type.length; _j++) {
+            var _name = _fields_name[_j];
+            if (_fields_type[_j] === false || _name === "cluster") {
+                // 如果是數字
+                var _value = '?';
+                if (typeof(_fields_value[_j]) !== "undefined" && typeof(_fields_value[_j][_i]) !== "undefined") {
+                    _value = _fields_value[_j][_i];
+                }
+                
+                if (_value === "?") {
+                    //_lost_data = true;
+                    _value = '';
+                    //console.log(_lost_data);
+                }
+                
+                if (_name === "cluster") {
+                    _value = parseInt(_value.split("cluster").join(""), 10);
+                }
+                
+                _line.push(_value);
+            }
+        }
         
-        var _file_name = _panel.find(".filename").val();
-        var _data = _panel.find(".preview").val();
-        
-        _download_file(_data, _file_name, "csv");
+        if (_lost_data === false) {
+            _data.push(_line.join(","));
+        }
+    }
+    
+    _data = _data.join("\n");
+    
+    // -----------------------
+
+    _download_file(_data, _file_name, "csv");
 };
 
 // ------------------------
@@ -579,6 +672,8 @@ $(function () {
     _panel.find(".input-mode.textarea").click(_load_textarea).keyup(_load_textarea);
     _panel.find(".myfile").change(_load_file);
     _panel.find(".download-file").click(_download_file_button);
+    _panel.find(".download-numeric-variables").click(_download_numeric_variables_button);
+    //_panel.find(".download-contingency-table").click(_download_contingency_variables_button);
     
     $('.menu .item').tab();
     $("button.copy-table").click(_copy_table);

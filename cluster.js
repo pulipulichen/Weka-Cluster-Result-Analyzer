@@ -69,7 +69,7 @@ var _draw_stat_table = function (_result) {
                                         if (typeof(_full_data[_attr]) !== "object" || typeof(_full_data[_attr].push) === "undefined") {
                                             _full_data[_attr] = [];
                                         }
-                                        console.log([_attr, typeof(_full_data[_attr]), typeof(_full_data[_attr].push)]);
+                                        //console.log([_attr, typeof(_full_data[_attr]), typeof(_full_data[_attr].push)]);
                                         _full_data[_attr].push(_value);
                                         
                                         // --------------

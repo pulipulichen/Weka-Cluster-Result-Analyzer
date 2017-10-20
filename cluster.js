@@ -193,8 +193,8 @@ var _draw_stat_table = function (_result) {
                 var _title_prefix = 'Full Data, ' + _attr + ' ';
                 if (_is_array(_full_data_attr)) {
                         
-                        _avg_tr.append('<th>' + _attr + ' (Avg.) </th>');
-                        _stddev_tr.append('<th>' + _attr + ' (Std.) </th>');
+                        _avg_tr.append('<th>var' + _a + ': ' + _attr + ' (Avg.) </th>');
+                        _stddev_tr.append('<th>var' + _a + ': ' + _attr + ' (Std.) </th>');
                         
                         var _full_avg = _stat_avg(_full_data_attr);
                         var _full_stddev = _stat_stddev(_full_data_attr);
@@ -204,7 +204,9 @@ var _draw_stat_table = function (_result) {
                                 + _float_to_fixed(_full_stddev, _to_fixed) + '</td>');
                 }
                 else {
-                        _avg_tr.append('<th>' + _attr + ' (Freq.) </th>');
+                        _avg_tr.append('<th>var' + _a + ': <span class="name">' + _attr + '</span> (Freq.) ' 
+                                + '<br /><button type="button" class="ui tiny button " onclick="_download_contingency_table_button(this)"><i class="download icon"></i></button>'
+                                + '</th>');
                         
                         //console.log("full data不是陣列: " + _attr);
                         //console.log(_full_data_attr);

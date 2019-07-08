@@ -23,7 +23,7 @@ var _process_file = function(_input, _callback) {
     var _needle = "\n@data\n";
     var _pos =    _input.indexOf(_needle);
     if (_pos === -1) {
-            _pos =    _input.indexOf("@data")-1;
+      _pos = _input.indexOf("@data") - 1;
     }
     //console.log(_pos);
     var _result;
@@ -35,9 +35,10 @@ var _process_file = function(_input, _callback) {
         _arff_mode = false;
         _result = _input.substring(_input.indexOf("\n")+1, _input.length).trim();
     }
-
+    
     // -----------------
     var _attr_list = [];
+    var _attr_values = [];
     if (_arff_mode === true) {
         var _attr_input = _input.substr(0, _pos);
         var _lines = _attr_input.split("\n");
@@ -48,21 +49,47 @@ var _process_file = function(_input, _callback) {
                     var _fields = _line.split(" ");
                     var _attr = _fields[1];
                     _attr_list.push(_attr);
+                    var _values = _fields[2].slice(1, -1).split(',')
+                    _attr_values.push(_values)
             }
         }
         //console.log(_attr_list);
+        
+        if (_result.startsWith('{') && _result.endsWith('}')) {
+          //console.log('aaa')
+          let output = []
+          _result.split('\n').forEach(line => {
+            let fields = new Array(_attr_list.length)
+            
+            line.trim().slice(1, -1).split(',').forEach(field => {
+              let pos = field.indexOf(' ')
+              let i = field.slice(0, pos)
+              i = parseInt(i, 10)
+              let value = field.slice(pos+1)
+              fields[i] = value
+            })
+            
+            for (let i = 0; i < _attr_list.length; i++) {
+              if (typeof(fields[i]) === 'undefined') {
+                fields[i] = _attr_values[i][0]
+              }
+            }
+            output.push(fields.join(','))
+          })
+          _result = output.join('\n')
+        }
     }
     else {
         var _attr_line = _input.substr(0, _input.indexOf("\n")).trim();
         _attr_list = _attr_line.split(",");
-        
     }
     _result = _attr_list.join(",") + "\n" + _result;
     _draw_stat_table(_result);
-    
+        
     if (typeof(_callback) === "function") {
         _callback(_result);
     }
+                
 };
 
 
@@ -108,6 +135,9 @@ var _draw_stat_abs_table = function () {
                 for (var _d = 1; _d < _td_list.length; _d++) {
                         var _cluster = _d-1;
                         
+                        var _avg = _avg_tr_list.eq(_r).find(`td:eq(${_d})`).text();
+                        eval('_avg = ' + _avg)
+                        
                         if (typeof(_good[_cluster]) === "undefined") {
                             _good[_cluster] = [];
                         }
@@ -131,6 +161,8 @@ var _draw_stat_abs_table = function () {
                             _set_attr = '<span class="largest">' + _set_attr + '</span>';
                         }
                         
+                        _set_attr = `<span data-avg="${_avg}">${_set_attr}</span>`
+                        
                         if (_td.hasClass("small") || _td.hasClass("x-small") || _td.hasClass("xx-small")) {
                             _bad[_cluster].push(_set_attr);
                         }
@@ -146,15 +178,23 @@ var _draw_stat_abs_table = function () {
         _good_tr.append("<th>" + DICT["Larger than Avg."] + "</th>");
         for (var _i = 0; _i < _good.length; _i++) {
                 var _value = _good[_i].join("<br />");
-                _good_tr.append('<td>' + _value + '</td>');
+                _good_tr.append('<td><div>' + _value + '</div></td>');
         }
         
         var _bad_tr = _abs_table.find("tr.bad").empty();
         _bad_tr.append("<th>" + DICT["Smaller than Avg."] + "</th>");
         for (var _i = 0; _i < _bad.length; _i++) {
                 var _value = _bad[_i].join("<br />");
-                _bad_tr.append('<td>' + _value + '</td>');
+                _bad_tr.append('<td><div>' + _value + '</div></td>');
         }
+        
+        //setTimeout(() => {
+          _abs_table.find('thead tr th:not(:first)').each((_i, th) => {
+            //console.log($('table.stat-result:first tr.compare-data:first td:eq(' + (_i+1) + ')').length)
+            let count = $('table.stat-result:first tr.compare-data:first td:eq(' + (_i+1) + ')').text()
+            let button = $('<button type="button" onclick="TagCloud.donwload(this, ' + (_i+1) + ', ' + count + ')">下載</button>').appendTo($(th))
+          })
+        //}, 1000)
 };
 
 // ---------------------
@@ -323,8 +363,39 @@ var _change_sse = function () {
 var _output_filename_surffix="_output";
 var _output_filename_ext=".csv";
 
-
 // -------------------------------------
+
+let setPreviewCluster = function (result) {
+  //console.log(result)
+  let header = result.slice(0, result.indexOf('\n')).split(',')
+  let clusterFieldIndex
+  for (let i = 0; i < header.length; i++) {
+    if (header[i] === 'cluster') {
+      clusterFieldIndex = i
+      break
+    }
+  }
+  
+  if (clusterFieldIndex === undefined) {
+    return
+  }
+  
+  let clusterResult = ['cluster']
+  result.slice(result.indexOf('\n')+1).split('\n').forEach(line => {
+    let fields = line.split(',')
+    let cluster = fields[clusterFieldIndex]
+    if ((cluster.startsWith('"') && cluster.endsWith('"')) 
+            || (cluster.startsWith("'") && cluster.endsWith("'"))) {
+      cluster = cluster.slice(1, -1)
+    }
+  
+    clusterResult.push(cluster)
+    
+  })
+  
+  $('#previewCluster').val(clusterResult.join('\n'))
+  //console.log(clusterResult.join('\n'))
+}
 
 var _load_file = function(evt) {
         //console.log(1);
@@ -358,6 +429,9 @@ var _load_file = function(evt) {
 
                 _process_file(_result, function (_result) {
                         _panel.find(".preview").val(_result);
+                        
+                        setPreviewCluster(_result)
+                        
                         _panel.find(".filename").val(_file_name);
                                                 
                         $(".file-process-framework .myfile").val("");
@@ -367,7 +441,7 @@ var _load_file = function(evt) {
 
                         var _auto_download = (_panel.find('[name="autodownload"]:checked').length === 1);
                         if (_auto_download === true) {
-                            _panel.find(".download-file").click();
+                                _panel.find(".download-file").click();
                         }
                         
                         //_download_file(_result, _file_name, "txt");
@@ -406,6 +480,7 @@ var _load_textarea = function(evt) {
 
         _process_file(_result, function (_result) {
                 _panel.find(".preview").val(_result);
+                setPreviewCluster(_result)
                 _panel.find(".filename").val(_file_name);
 
                 _panel.find(".loading").addClass("hide");
@@ -420,13 +495,16 @@ var _load_textarea = function(evt) {
 };
 
 var _download_file_button = function () {
-    var _panel = $(".file-process-framework");
-
-    var _file_name = _panel.find(".filename").val().trim();
-    var _data = _panel.find(".preview").val().trim();
-
-    _download_file(_data, _file_name, "csv");
+        var _panel = $(".file-process-framework");
+        
+        var _file_name = _panel.find(".filename").val();
+        var _data = _panel.find(".preview").val();
+        if (_file_name.endsWith('.csv') === false) {
+          _file_name = _file_name + '.csv'
+        }
+        _download_file(_data, _file_name, "csv");
 };
+
 
 var _download_numeric_variables_button = function () {
     var _panel = $(".file-process-framework");
@@ -519,6 +597,22 @@ var _download_numeric_variables_button = function () {
     // -----------------------
 
     _download_file(_data, _file_name, "csv");
+};
+
+var _download_cluster_file_button = function () {
+        var _panel = $(".file-process-framework");
+        
+        var _file_name = _panel.find(".filename").val()
+        if (_file_name.endsWith('.csv')) {
+          _file_name = _file_name.slice(0, -4) + '-cluster.csv'
+        }
+        else {
+          _file_name = _file_name + '-cluster.csv'
+        }
+        
+        var _data = _panel.find(".preview-cluster").val();
+        
+        _download_file(_data, _file_name, "csv");
 };
 
 // ------------------------
@@ -744,7 +838,7 @@ $(function () {
     _panel.find(".myfile").change(_load_file);
     _panel.find(".download-file").click(_download_file_button);
     _panel.find(".download-numeric-variables").click(_download_numeric_variables_button);
-    //_panel.find(".download-contingency-table").click(_download_contingency_variables_button);
+    _panel.find(".download-cluster-file").click(_download_cluster_file_button);
     
     $('.menu .item').tab();
     $("button.copy-table").click(_copy_table);
@@ -755,7 +849,8 @@ $(function () {
     $("#show_std").change(_change_show_std);
     
     // 20170108 測試用
-    $.get("data.csv", function (_data) {
+    //$.get("data.csv", function (_data) {
+    $.get("data-text-mining.csv", function (_data) {
             $("#input_mode_textarea").val(_data);
             $("#input_mode_textarea").keyup();
     });

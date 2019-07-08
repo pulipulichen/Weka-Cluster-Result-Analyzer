@@ -849,8 +849,8 @@ $(function () {
     $("#show_std").change(_change_show_std);
     
     // 20170108 測試用
-    //$.get("data.csv", function (_data) {
-    $.get("data-text-mining.csv", function (_data) {
+    $.get("data.csv", function (_data) {
+    //$.get("data-text-mining.csv", function (_data) {
             $("#input_mode_textarea").val(_data);
             $("#input_mode_textarea").keyup();
     });

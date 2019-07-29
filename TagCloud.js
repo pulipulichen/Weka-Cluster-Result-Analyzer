@@ -2,7 +2,8 @@ TagCloud = {
   donwload: function (button, _i, count) {
     let data = []
 
-    let td = $(button).parents('table:first').find('tbody > tr.good > td:eq(' + (_i-1) +  ') > div')
+    let table = $('table.stat-result-abstract')
+    let td = table.find('tbody > tr.good > td:eq(' + (_i-1) +  ') > div')
     td.children().each((i, span) => {
       span = $(span)
       let avg = span.attr('data-avg')

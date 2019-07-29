@@ -102,19 +102,21 @@ https://semantic-ui.com/collections/form.html
 				DOWNLOAD
 			  </button>
 		</div>
+    <!--
     <div class="four wide column">
 			<button type="button" class="fluid ui large right labeled icon green button download-cluster-file">
 				<i class="right download icon"></i>
         DOWNLOAD<br />CLUSTER RESULT
 			  </button>
 		</div>
-    <div class="four wide column">
+    -->
+    <div class="six wide column">
                     <button type="button" class="fluid ui large right labeled icon button download-numeric-variables">
                             <i class="right download icon"></i>
                             NUMERIC VARIABLES
                     </button>
 		</div>
-		<div class="four wide column">
+		<div class="six wide column">
 			<a href="https://docs.google.com/spreadsheet/ccc?new" target="_blank">
 				<button type="button" class="fluid ui large right labeled icon button">
 					<i class="right table icon"></i>
@@ -129,7 +131,8 @@ https://semantic-ui.com/collections/form.html
       <input type="text" onfocus="this.select()" id="filename" class="filename" style="width: calc(100% - 15em)" />
     </div>
     
-    <div class="field">
+  <div class="two fields">
+    <div class="ten wide field">
       <label for="preview">
         Result Preview: 
         <div class="ui  pointing below  medium blue basic label encoding" style="margin-left: 1em">
@@ -142,8 +145,23 @@ https://semantic-ui.com/collections/form.html
       </label>
         
       <textarea id="preview" class="preview" onfocus="this.select();"></textarea>
+    </div>
+    
+    <div class="six wide field">
+      <label for="previewCluster">
+        Cluster result: 
+		<button type="button" class="ui mini compact teal right labeled icon button copy-cluster" style="margin-left: 1em">
+		  COPY
+		  <i class="copy icon"></i>
+	    </button>
+      </label>
+        
       <textarea id="previewCluster" class="preview-cluster" onfocus="this.select();"></textarea>
     </div>
+    
+  </div>
+  
+    
 	<div class="field">
 	
 	

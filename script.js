@@ -192,7 +192,7 @@ var _draw_stat_abs_table = function () {
           _abs_table.find('thead tr th:not(:first)').each((_i, th) => {
             //console.log($('table.stat-result:first tr.compare-data:first td:eq(' + (_i+1) + ')').length)
             let count = $('table.stat-result:first tr.compare-data:first td:eq(' + (_i+1) + ')').text()
-            let button = $('<button type="button" onclick="TagCloud.donwload(this, ' + (_i+1) + ', ' + count + ')">下載</button>').appendTo($(th))
+            //let button = $('<button type="button" onclick="TagCloud.donwload(this, ' + (_i+1) + ', ' + count + ')">下載</button>').appendTo($(th))
           })
         //}, 1000)
 };
@@ -670,11 +670,19 @@ var _copy_table = function () {
 };
 
 var _copy_csv_table = function () {
-        var _button = $(this);
-        
-        var _text = $("#preview").val().replace(/,/g , "\t");
-        
-        _copy_to_clipboard(_text);
+  var _button = $(this);
+
+  var _text = $("#preview").val().replace(/,/g, "\t");
+
+  _copy_to_clipboard(_text);
+};
+
+var _copy_cluster_table = function () {
+  var _button = $(this);
+
+  var _text = $("#previewCluster").val().replace(/,/g, "\t");
+
+  _copy_to_clipboard(_text);
 };
 
 var _copy_to_clipboard = function(_content) {
@@ -843,6 +851,7 @@ $(function () {
     $('.menu .item').tab();
     $("button.copy-table").click(_copy_table);
     $("button.copy-csv").click(_copy_csv_table);
+    $("button.copy-cluster").click(_copy_cluster_table);
     $("#decimal_places").change(_change_to_fixed);
     
     $("#show_fulldata").change(_change_show_fulldata);

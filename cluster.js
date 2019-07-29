@@ -123,7 +123,9 @@ var _draw_stat_table = function (_result) {
                 //let count = $('table.stat-result:first tbody tr.compare-data:first td:eq(' + (_i+1) + ')').text()
                 //count = parseInt(count, 10)
                 //console.log('<th>' + DICT['Cluster 1'] + _i + DICT['Cluster 2'] + '(' +  _cluster_count[_i] + ') </th>')
-                _thead.append('<th>' + DICT['Cluster 1'] + _i + DICT['Cluster 2'] + '(' +  _cluster_count[_i] + ') </th>');
+                _thead.append('<th>' + DICT['Cluster 1'] + _i + DICT['Cluster 2'] + '(' +  _cluster_count[_i] + ')' 
+                        + '<button type="button" onclick="TagCloud.donwload(this, ' + _i + ', ' + _cluster_count[_i] + ')">下載</button>'
+                        + ' </th>');
                 // <button type="button" onclick="TagCloud.donwload(this, ' + _i + ', ' + count + ')">下載</button>
         }
         //_thead.append('<th>' +    DICT['SSE_TH'] + '</th>');

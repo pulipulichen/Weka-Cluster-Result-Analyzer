@@ -161,6 +161,33 @@ https://semantic-ui.com/collections/form.html
     
   </div>
   
+    <!-- -------------------------------- -->
+    
+	<div class="field">
+		<label for="preview">
+		<!-- Statistic Abstract: -->
+		分群比較表：
+		<button type="button" class="ui mini compact teal right labeled icon button copy-table" 
+			data-copy-table=".stat-result-abstract"
+			style="margin-left: 1em">
+		  COPY TABLE
+		  <i class="copy icon"></i>
+		</button>
+		</label>
+		<table class="stat-result-abstract" border="1" cellspacing="2">
+			<thead><tr></tr></thead>
+			<tbody>
+				<tr class="good"></tr>
+				<tr class="bad"></tr>
+			</tbody>
+	    </table>
+            <div>
+                <!-- * is the largest/smallest.-->
+                有*的變項表示均值是最大或最小的一群。
+            </div>
+	</div> <!-- <div class="field"> -->
+  
+  <!-- ---------------------------------------------- -->
     
 	<div class="field">
 	
@@ -244,29 +271,8 @@ https://semantic-ui.com/collections/form.html
 	  
     </div> <!-- <div class="field"> -->
 	
-	<div class="field">
-		<label for="preview">
-		<!-- Statistic Abstract: -->
-		分群比較表：
-		<button type="button" class="ui mini compact teal right labeled icon button copy-table" 
-			data-copy-table=".stat-result-abstract"
-			style="margin-left: 1em">
-		  COPY TABLE
-		  <i class="copy icon"></i>
-		</button>
-		</label>
-		<table class="stat-result-abstract" border="1" cellspacing="2">
-			<thead><tr></tr></thead>
-			<tbody>
-				<tr class="good"></tr>
-				<tr class="bad"></tr>
-			</tbody>
-	    </table>
-            <div>
-                <!-- * is the largest/smallest.-->
-                有*的變項表示均值是最大或最小的一群。
-            </div>
-	</div>
+  
+  <!-- -------------------------------- -->
   
   </div>
     </div> <!-- <div class="column"> -->

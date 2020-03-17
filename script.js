@@ -89,7 +89,7 @@ var _process_file = function(_input, _callback) {
     if (typeof(_callback) === "function") {
         _callback(_result);
     }
-                
+    
 };
 
 
@@ -101,7 +101,6 @@ var _is_array = function (_obj) {
 };
 
 // ----------------------------
-
 
 var FULL_DATA;
 var CLUSTER_DATA;
@@ -136,7 +135,12 @@ var _draw_stat_abs_table = function () {
                         var _cluster = _d-1;
                         
                         var _avg = _avg_tr_list.eq(_r).find(`td:eq(${_d})`).text();
-                        eval('_avg = ' + _avg)
+                        try {
+                          eval('_avg = ' + _avg)
+                        }
+                        catch (e) {
+                          alert(_avg_tr_list.eq(_r).find(`th:eq(0)`).text() + ' is nominal')
+                        }
                         
                         if (typeof(_good[_cluster]) === "undefined") {
                             _good[_cluster] = [];
@@ -377,7 +381,7 @@ let setPreviewCluster = function (result) {
   }
   
   if (clusterFieldIndex === undefined) {
-    return
+    return false
   }
   
   let clusterResult = ['cluster']
@@ -401,6 +405,10 @@ var _load_file = function(evt) {
         //console.log(1);
         if(!window.FileReader) return; // Browser is not compatible
 
+
+    $('body').addClass('loading')
+
+        
         var _panel = $(".file-process-framework");
         
         _panel.find(".loading").removeClass("hide");
@@ -443,6 +451,8 @@ var _load_file = function(evt) {
                         if (_auto_download === true) {
                                 _panel.find(".download-file").click();
                         }
+                        
+                        $('body').removeClass('loading')
                         
                         //_download_file(_result, _file_name, "txt");
                 });

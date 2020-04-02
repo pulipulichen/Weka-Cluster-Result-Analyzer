@@ -3,7 +3,7 @@ TagCloud = {
     let data = []
 
     let table = $('table.stat-result-abstract')
-    let td = table.find('tbody > tr.good > td:eq(' + (_i-1) +  ') > div')
+    let td = table.find('tbody > tr.good > td:eq(' + (_i - 1) + ') > div')
     td.children().each((i, span) => {
       span = $(span)
       let avg = span.attr('data-avg')
@@ -12,7 +12,7 @@ TagCloud = {
       if (attr.indexOf(': ') > 0) {
         attr = attr.slice(attr.indexOf(': ') + 2).trim()
       }
-      
+
       if (attr === '' || attr.startsWith('筆數')) {
         return
       }
@@ -24,21 +24,21 @@ TagCloud = {
         'freq': Math.ceil(avg * count)
       })
     })
-    
+
     //console.log(data)
     data.sort(function (a, b) {
-        return b.freq - a.freq;
+      return b.freq - a.freq;
     });
     //console.log(data)
 
     //console.log(data)
     let stringData = []
-    
+
     data.forEach(item => {
       stringData.push(item.freq + '\t' + item.attr)
     })
-    
+
     _download_file(stringData.join('\n'), 'TagCloud-cluster' + _i + '.txt', 'txt')
   },
-  
+
 }

@@ -1,4 +1,4 @@
-/* global DICT */
+/* global DICT, _stat_avg */
 
 /**
  * 繪製統計表格
@@ -7,107 +7,27 @@
 var _draw_stat_table = function (_result) {
   // ---------------------------
   // 讀取資料
-  var _lines = _result.split("\n");
-
+  //var _lines = _result.split("\n");
+  _result = parse_result_to_object(_result)
+  if (!_result) {
+    return false
+  }
+  
+  var _attr_list = _result.attr_list
+  var _cluster_data = _result.cluster_data
+  var _cluster_count = _result.cluster_count
+  var _full_data = _result.full_data
+  var _full_count = _result.full_count
+  
+  // --------------------------
+  
+  var _to_fixed = $("#decimal_places").val();
+  _to_fixed = parseInt(_to_fixed, 10);
+  
   // 繪製表格
   var _table = $(".stat-result");
   var _thead = _table.find("thead tr").empty();
   var _tbody = _table.find("tbody").empty();
-
-  var _needle1 = "Instance_number";
-  var _needle2 = "Cluster";
-  if (_lines[0].substr(0, _needle1.length).toLowerCase() !== _needle1.toLowerCase()
-          && _lines[0].substring((_lines[0].length - _needle2.length), _lines[0].length).toLowerCase() !== _needle2.toLowerCase()) {
-    console.log(["資料錯誤: 缺少Cluster或Instance_number欄位", _lines[0].substring((_lines[0].length - _needle2.length), _lines[0].length).toLowerCase() !== _needle2]);
-    alert("資料錯誤: 缺少Cluster或Instance_number欄位");
-    return;
-  }
-
-  var _attr_list = [];
-  var _cluster_data = [];
-  var _cluster_count = [];
-  var _full_data = {};
-  var _full_count = _lines.length - 1;
-
-  var _to_fixed = $("#decimal_places").val();
-  _to_fixed = parseInt(_to_fixed, 10);
-
-  for (var _i = 0; _i < _lines.length; _i++) {
-    var _fields = _lines[_i].split(",");
-    if (_i === 0) {
-      // 讀取屬性名稱
-      _attr_list = _fields;
-    } else {
-      // 讀取資料
-
-      // 要先知道是那個cluster
-      // cluster4
-      var _cluster = _fields[(_fields.length - 1)];
-      _cluster = _cluster.substring(7, _cluster.length);
-      _cluster = parseInt(_cluster, 10);
-
-      if (typeof (_cluster_data[_cluster]) === "undefined") {
-        _cluster_data[_cluster] = {};
-      }
-      if (typeof (_cluster_count[_cluster]) === "undefined") {
-        _cluster_count[_cluster] = 0;
-      }
-      _cluster_count[_cluster]++;
-
-      for (var _f = 0; _f < _fields.length - 1; _f++) {
-        var _value = _fields[_f].trim();
-        var _attr = _attr_list[_f];
-
-        if (_attr === "Instance_number") {
-          continue;
-        }
-
-        // 判斷是否是數值
-        if (isNaN(_value) === false) {
-          // 如果是數值
-          _value = parseFloat(_value, 10);
-
-          if (typeof (_full_data[_attr]) !== "object" || typeof (_full_data[_attr].push) === "undefined") {
-            _full_data[_attr] = [];
-          }
-          //console.log([_attr, typeof(_full_data[_attr]), typeof(_full_data[_attr].push)]);
-          _full_data[_attr].push(_value);
-
-          // --------------
-
-          if (typeof (_cluster_data[_cluster][_attr]) === "undefined" || typeof (_cluster_data[_cluster][_attr].push) === "undefined") {
-            _cluster_data[_cluster][_attr] = [];
-          }
-          _cluster_data[_cluster][_attr].push(_value);
-        } else {
-          // 如果不是表格
-          var _cat = _value;
-
-          if (typeof (_full_data[_attr]) === "undefined") {
-            _full_data[_attr] = {};
-          }
-          if (typeof (_cluster_data[_cluster][_attr]) === "undefined") {
-            _cluster_data[_cluster][_attr] = {};
-          }
-
-          if (typeof (_full_data[_attr][_cat]) === "number") {
-            _full_data[_attr][_cat] = _full_data[_attr][_cat] + 1;
-          } else {
-            _full_data[_attr][_cat] = 1;
-          }
-
-          if (typeof (_cluster_data[_cluster][_attr][_cat]) === "number") {
-            _cluster_data[_cluster][_attr][_cat] = _cluster_data[_cluster][_attr][_cat] + 1;
-          } else {
-            _cluster_data[_cluster][_attr][_cat] = 1;
-          }
-        }
-      }
-    }
-  }
-
-  //console.log(_full_data);
-
 
   // -------------------------
   // 先畫開頭
@@ -305,3 +225,111 @@ var _draw_stat_table = function (_result) {
   TO_FIXED = _to_fixed;
   //_calc_cluster_score();
 };
+
+let parse_result_to_object = function (_result) {
+  // ---------------------------
+  // 讀取資料
+  var _lines = _result.split("\n");
+
+  
+  var _needle1 = "Instance_number";
+  var _needle2 = "Cluster";
+  if (_lines[0].substr(0, _needle1.length).toLowerCase() !== _needle1.toLowerCase()
+          && _lines[0].substring((_lines[0].length - _needle2.length), _lines[0].length).toLowerCase() !== _needle2.toLowerCase()) {
+    console.log(["資料錯誤: 缺少Cluster或Instance_number欄位", _lines[0].substring((_lines[0].length - _needle2.length), _lines[0].length).toLowerCase() !== _needle2]);
+    alert("資料錯誤: 缺少Cluster或Instance_number欄位");
+    return false;
+  }
+
+  var _attr_list = [];
+  var _cluster_data = [];
+  var _cluster_count = [];
+  var _full_data = {};
+  var _full_count = _lines.length - 1;
+
+  for (var _i = 0; _i < _lines.length; _i++) {
+    var _fields = _lines[_i].split(",");
+    if (_i === 0) {
+      // 讀取屬性名稱
+      _attr_list = _fields;
+    } else {
+      // 讀取資料
+
+      // 要先知道是那個cluster
+      // cluster4
+      var _cluster = _fields[(_fields.length - 1)];
+      _cluster = _cluster.substring(7, _cluster.length);
+      _cluster = parseInt(_cluster, 10);
+
+      if (typeof (_cluster_data[_cluster]) === "undefined") {
+        _cluster_data[_cluster] = {};
+      }
+      if (typeof (_cluster_count[_cluster]) === "undefined") {
+        _cluster_count[_cluster] = 0;
+      }
+      _cluster_count[_cluster]++;
+
+      for (var _f = 0; _f < _fields.length - 1; _f++) {
+        var _value = _fields[_f].trim();
+        var _attr = _attr_list[_f];
+
+        if (_attr === "Instance_number") {
+          continue;
+        }
+
+        // 判斷是否是數值
+        if (isNaN(_value) === false) {
+          // 如果是數值
+          _value = parseFloat(_value, 10);
+
+          if (typeof (_full_data[_attr]) !== "object" 
+                  || typeof (_full_data[_attr].push) === "undefined") {
+            _full_data[_attr] = [];
+          }
+          //console.log([_attr, typeof(_full_data[_attr]), typeof(_full_data[_attr].push)]);
+          _full_data[_attr].push(_value);
+
+          // --------------
+
+          if (typeof (_cluster_data[_cluster][_attr]) === "undefined" 
+                  || typeof (_cluster_data[_cluster][_attr].push) === "undefined") {
+            _cluster_data[_cluster][_attr] = [];
+          }
+          _cluster_data[_cluster][_attr].push(_value);
+        } else {
+          // 如果不是表格
+          var _cat = _value;
+
+          if (typeof (_full_data[_attr]) === "undefined") {
+            _full_data[_attr] = {};
+          }
+          if (typeof (_cluster_data[_cluster][_attr]) === "undefined") {
+            _cluster_data[_cluster][_attr] = {};
+          }
+
+          if (typeof (_full_data[_attr][_cat]) === "number") {
+            _full_data[_attr][_cat] = _full_data[_attr][_cat] + 1;
+          } else {
+            _full_data[_attr][_cat] = 1;
+          }
+
+          if (typeof (_cluster_data[_cluster][_attr][_cat]) === "number") {
+            _cluster_data[_cluster][_attr][_cat] = _cluster_data[_cluster][_attr][_cat] + 1;
+          } else {
+            _cluster_data[_cluster][_attr][_cat] = 1;
+          }
+        }
+      }
+    }
+  }
+
+  //console.log(_full_data);
+  
+  return {
+    attr_list: _attr_list,
+    full_data: _full_data,
+    full_count: _full_count,
+    cluster_data: _cluster_data,
+    cluster_count: _cluster_count
+  }
+}

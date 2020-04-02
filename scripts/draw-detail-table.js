@@ -335,8 +335,8 @@ let parse_result_to_object = function (_result) {
   //console.log(_full_data);
   //console.log(_cluster_data)
   
-  _attr_levels = remove_unknown_cat(_attr_levels)
-  console.log(_attr_levels)
+  //_attr_levels = remove_unknown_cat(_attr_levels)
+  //console.log(_attr_levels)
   
   return {
     attr_list: _attr_list,
@@ -357,7 +357,7 @@ let remove_unknown_cat = function (_attr_levels) {
     _temp_attr_levels[level] = levels
   }
   _attr_levels = _temp_attr_levels
-  console.log(_attr_levels)
+  //console.log(_attr_levels)
   
   return _attr_levels
 }

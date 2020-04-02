@@ -1,3 +1,5 @@
+/* global DICT */
+
 /**
  * 繪製統計表格
  * @param {String} _result

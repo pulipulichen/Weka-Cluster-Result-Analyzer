@@ -14,7 +14,7 @@ TagCloud = {
       }
 
       if (attr === '' || attr.startsWith('筆數')) {
-        return
+        return undefined
       }
       if (attr.endsWith('*')) {
         attr = attr.slice(0, -1)

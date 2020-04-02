@@ -1,4 +1,6 @@
 
+/* global DICT */
+
 var _process_file = function (_input, _callback) {
 
   //------------------

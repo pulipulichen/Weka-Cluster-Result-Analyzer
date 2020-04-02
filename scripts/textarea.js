@@ -1,4 +1,6 @@
 
+/* global _output_filename_surffix, _output_filename_ext */
+
 var _load_textarea = function (evt) {
   var _panel = $(".file-process-framework");
 

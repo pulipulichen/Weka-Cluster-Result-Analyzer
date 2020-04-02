@@ -109,6 +109,7 @@ var _draw_stat_table = function (_result) {
 
     var _avg_tr = $('<tr class="avg-tr compare-data"></tr>');
     var _stddev_tr = $('<tr class="std-tr"></tr>');
+    var _cov_tr = $('<tr class="cov-tr"></tr>');
 
     //_avg_tr.append('<td>' + _attr + ':<br /> Avg. (Std.) </td>');
 
@@ -119,13 +120,20 @@ var _draw_stat_table = function (_result) {
 
       _avg_tr.append('<th>var' + _a + ': ' + _attr + ' (Avg.) </th>');
       _stddev_tr.append('<th>var' + _a + ': ' + _attr + ' (Std.) </th>');
+      _cov_tr.append('<th>var' + _a + ': ' + _attr + ' (CoV.) </th>');
 
       var _full_avg = _stat_avg(_full_data_attr);
       var _full_stddev = _stat_stddev(_full_data_attr);
+      var _full_cov = 0
+      if (_full_avg !== 0) {
+        _full_cov = _full_stddev / _full_avg
+      }
       _avg_tr.append('<td class="fulldata avg" title="' + _title_prefix + ' Avg." data-ori-value="' + _full_avg + '">'
               + _float_to_fixed(_full_avg, _to_fixed) + '</td>');
       _stddev_tr.append('<td class="fulldata std" title="' + _title_prefix + ' Std." data-ori-value="' + _full_stddev + '">'
               + _float_to_fixed(_full_stddev, _to_fixed) + '</td>');
+      _cov_tr.append('<td class="fulldata cov" title="' + _title_prefix + ' CoV." data-ori-value="' + _full_cov + '">'
+              + _float_to_fixed(_full_cov, _to_fixed) + '</td>');
     } else {
       _avg_tr.append('<th>var' + _a + ': <span class="name">' + _attr + '</span> (Freq.) '
               + '<br /><button type="button" class="ui tiny button " onclick="_download_contingency_table_button(this)"><i class="download icon"></i></button>'
@@ -152,7 +160,11 @@ var _draw_stat_table = function (_result) {
         // 是數值
         var _avg = _stat_avg(_attr_data);
         _row_data.push(_avg);
-        var _stddev = _stat_stddev(_attr_data);
+        var _stddev = _stat_stddev(_attr_data)
+        let cov = 0
+        if (_avg !== 0) {
+          cov = _stddev / _avg
+        }
 
         var _classname = "normal";
 
@@ -183,6 +195,9 @@ var _draw_stat_table = function (_result) {
         _stddev_tr.append('<td class="std" title="' + _title_prefix + ' Std." data-ori-value="' + _stddev + '">'
                 + _float_to_fixed(_stddev, _to_fixed)
                 + '</td>');
+        _cov_tr.append('<td class="cov" title="' + _title_prefix + ' CoV." data-ori-value="' + cov + '">'
+                + _float_to_fixed(cov, _to_fixed)
+                + '</td>');
       } else {
         // 不是數值
 
@@ -209,7 +224,8 @@ var _draw_stat_table = function (_result) {
 
     _avg_tr.appendTo(_tbody);
     if (_is_array(_full_data_attr)) {
-      _stddev_tr.appendTo(_tbody);
+      _stddev_tr.appendTo(_tbody)
+      _cov_tr.appendTo(_tbody)
     }
   }
 

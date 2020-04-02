@@ -139,7 +139,7 @@ var _draw_stat_abs_table = function () {
                           eval('_avg = ' + _avg)
                         }
                         catch (e) {
-                          alert(_avg_tr_list.eq(_r).find(`th:eq(0)`).text() + ' is nominal')
+                          console.error(_avg_tr_list.eq(_r).find(`th:eq(0)`).text() + ' is nominal')
                         }
                         
                         if (typeof(_good[_cluster]) === "undefined") {
@@ -868,8 +868,8 @@ $(function () {
     $("#show_std").change(_change_show_std);
     
     // 20170108 測試用
-    $.get("data.csv", function (_data) {
-    //$.get("data-text-mining.csv", function (_data) {
+    //$.get("data.csv", function (_data) {
+    $.get("data-work.csv", function (_data) {
             $("#input_mode_textarea").val(_data);
             $("#input_mode_textarea").keyup();
     });

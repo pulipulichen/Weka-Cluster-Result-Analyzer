@@ -15,7 +15,7 @@ var _change_show_fulldata = function () {
 var _change_show_std = function () {
   var _show = ($("#show_std:checked").length === 1);
 
-  var _cells = $(".stat-result tr.std-tr, .stat-result tr.cov-tr");
+  var _cells = $(".stat-result tr.std-tr, .stat-result tr.cov-tr, .stat-result tr.freq-tr, .stat-result tr.entropy-tr");
   if (_show) {
     _cells.show();
   } else {

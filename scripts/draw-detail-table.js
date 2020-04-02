@@ -1,4 +1,4 @@
-/* global DICT, _stat_avg */
+/* global DICT, _stat_avg, nominal_to_binary_tr_list */
 
 /**
  * 繪製統計表格
@@ -135,7 +135,7 @@ var _draw_stat_table = function (_result) {
       _cov_tr.append('<td class="fulldata cov" title="' + _title_prefix + ' CoV." data-ori-value="' + _full_cov + '">'
               + _float_to_fixed(_full_cov, _to_fixed) + '</td>');
     } else {
-      _avg_tr.append('<th>var' + _a + ': <span class="name">' + _attr + '</span> (Freq.) '
+      _avg_tr.append('<th>var' + _a + ': <span class="name">' + _attr + '</span> (Prop.) '
               + '<br /><button type="button" class="ui tiny button " onclick="_download_contingency_table_button(this)"><i class="download icon"></i></button>'
               + '</th>');
 
@@ -166,6 +166,9 @@ var _draw_stat_table = function (_result) {
         if (_avg !== 0) {
           cov = _stddev / _avg
         }
+        
+        // 然後來計算它與整體cov的差異
+        let covFullDelta = _full_cov - cov
 
         var _classname = "normal";
 
@@ -196,7 +199,7 @@ var _draw_stat_table = function (_result) {
         _stddev_tr.append('<td class="std" title="' + _title_prefix + ' Std." data-ori-value="' + _stddev + '">'
                 + _float_to_fixed(_stddev, _to_fixed)
                 + '</td>');
-        _cov_tr.append('<td class="cov" title="' + _title_prefix + ' CoV." data-ori-value="' + cov + '">'
+        _cov_tr.append('<td class="cov" title="' + _title_prefix + ' CoV." data-ori-value="' + cov + '" data-cov-full-delta="' + covFullDelta + '">'
                 + _float_to_fixed(cov, _to_fixed)
                 + '</td>');
       } else {
@@ -205,7 +208,7 @@ var _draw_stat_table = function (_result) {
         //console.log("cluster data不是陣列: " + _i + " - " + _attr);
         //console.log(_attr_data);
         var _freq_data = _calc_mode(_attr_data);
-        _avg_tr.append('<td class="mark freq ' + _classname + '" title="' + _title_prefix + ' Freq." data-ori-value="' + _freq_data.full + '"><div>'
+        _avg_tr.append('<td class="mark freq ' + _classname + '" title="' + _title_prefix + ' Prop." data-ori-value="' + _freq_data.full + '"><div>'
                 + _freq_data.full
                 + '</div></td>');
         
@@ -232,8 +235,11 @@ var _draw_stat_table = function (_result) {
     }
     
     if (_is_array(_full_data_attr) === false) {
+      let levels = Object.keys(_full_data_attr).sort()
+      _avg_tr.attr('data-levels', levels.join(','))
+      
       // 如果是Freq，那我們多加NominalToBinary的選項
-      nominal_to_binary_tr_list(_attr, _full_data_attr, cluster_levels).forEach(tr => {
+      nominal_to_binary_tr_list(_attr, _full_data_attr, cluster_levels, _a, _title_prefix).forEach(tr => {
         tr.appendTo(_tbody)
       })
       

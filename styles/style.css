@@ -121,6 +121,7 @@ body {
 .stat-result th,
 .stat-result td {
   padding: 5px;
+  vertical-align: top;
 }
 
 .stat-result td.fulldata {

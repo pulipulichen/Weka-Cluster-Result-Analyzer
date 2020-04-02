@@ -246,6 +246,8 @@ let parse_result_to_object = function (_result) {
   var _cluster_count = [];
   var _full_data = {};
   var _full_count = _lines.length - 1;
+  
+  var _attr_levels = {}
 
   for (var _i = 0; _i < _lines.length; _i++) {
     var _fields = _lines[_i].split(",");
@@ -318,12 +320,23 @@ let parse_result_to_object = function (_result) {
           } else {
             _cluster_data[_cluster][_attr][_cat] = 1;
           }
+          
+          if (Array.isArray(_attr_levels[_attr]) === false) {
+            _attr_levels[_attr] = []
+          }
+          if (_attr_levels[_attr].indexOf(_cat) === -1) {
+            _attr_levels[_attr].push(_cat)
+          }
         }
       }
     }
   }
 
   //console.log(_full_data);
+  //console.log(_cluster_data)
+  
+  _attr_levels = remove_unknown_cat(_attr_levels)
+  console.log(_attr_levels)
   
   return {
     attr_list: _attr_list,
@@ -332,4 +345,19 @@ let parse_result_to_object = function (_result) {
     cluster_data: _cluster_data,
     cluster_count: _cluster_count
   }
+}
+
+let remove_unknown_cat = function (_attr_levels) {
+  let _temp_attr_levels = {}
+  for (let level in _attr_levels) {
+    let levels = _attr_levels[level]
+    if (levels.length === 1 && levels[0] === '?') {
+      continue
+    }
+    _temp_attr_levels[level] = levels
+  }
+  _attr_levels = _temp_attr_levels
+  console.log(_attr_levels)
+  
+  return _attr_levels
 }

@@ -149,6 +149,7 @@ var _draw_stat_table = function (_result) {
 
 
     var _row_data = [];
+    let cluster_levels = {}
 
     for (var _i = 0; _i < _cluster_count.length; _i++) {
       if (typeof (_cluster_data[_i]) === "undefined") {
@@ -207,8 +208,10 @@ var _draw_stat_table = function (_result) {
         _avg_tr.append('<td class="mark freq ' + _classname + '" title="' + _title_prefix + ' Freq." data-ori-value="' + _freq_data.full + '"><div>'
                 + _freq_data.full
                 + '</div></td>');
+        
+        cluster_levels[_i] = _attr_data
       }
-    }
+    } // for (var _i = 0; _i < _cluster_count.length; _i++) {
 
     // 分群品質算法
     //_avg_tr.append('<td class="checkbox sse">'
@@ -227,7 +230,15 @@ var _draw_stat_table = function (_result) {
       _stddev_tr.appendTo(_tbody)
       _cov_tr.appendTo(_tbody)
     }
-  }
+    
+    if (_is_array(_full_data_attr) === false) {
+      // 如果是Freq，那我們多加NominalToBinary的選項
+      nominal_to_binary_tr_list(_attr, _full_data_attr, cluster_levels).forEach(tr => {
+        tr.appendTo(_tbody)
+      })
+      
+    }
+  } // for (var _a = _start; _a < _attr_list.length - 1; _a++) {
 
   _change_show_fulldata();
   _change_show_std();

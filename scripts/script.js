@@ -169,7 +169,7 @@ var _calc_mode = function (_json) {
   var _full_result = [];
   for (var _i = 0; _i < _array_json.length; _i++) {
     var _value = parseInt(_array_json[_i].value / _sum * 100, 10) + "%";
-    var _data = "<tr><td class='freq-list'>" + _array_json[_i].key + "</td><td class='freq-list' freq-count='" + _array_json[_i].value + "'>" + _value + "</td></tr>";
+    var _data = "<tr><td class='prop-list'>" + _array_json[_i].key + "</td><td class='prop-list' freq-count='" + _array_json[_i].value + "'>" + _value + "</td></tr>";
     if (_i < 5) {
       _top_result.push(_data);
     }

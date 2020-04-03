@@ -50,14 +50,46 @@ let nominal_to_binary_tr_list = function (_attr, _full_data_attr, _clusters_data
   levels.forEach(function(level) {
     let tr = $('<tr class="freq-tr"></tr>')
     
-    
+    let pAvg = levelsAvgList[level].full_data / full_count
     tr.append('<th>var' + _a + ': ' + _attr + '=' + level.trim() + ' </th>')
-    tr.append('<td class="fulldata freq" title="Full Data ' + _attr + '=' + level + ' Freq." data-ori-value="' + levelsAvgList[level].full_data + '">'
+    tr.append('<td class="fulldata freq" title="Full Data ' + _attr + '=' + level + ' Freq." '
+      + 'data-ori-value="' + levelsAvgList[level].full_data + '" data-p="' + pAvg + '">'
               + _float_to_fixed(levelsAvgList[level].full_data, _to_fixed) + '</td>');
     
+    let pMax
+    let pMin
     for (let c in levelsAvgList[level].clusters) {
-      tr.append('<td class="freq" title="Cluster ' + c + ' ' + _attr + '=' + level + ' Freq." data-ori-value="' + levelsAvgList[level].clusters[c] + '">'
-              + _float_to_fixed(levelsAvgList[level].clusters[c], _to_fixed) + '</td>');
+      let p = levelsAvgList[level].clusters[c] / cluter_count[c]
+      if (!pMax || p > pMax) {
+        pMax = p
+      }
+      if (!pMin || p < pMin) {
+        pMin = p
+      }
+    }
+    
+    for (let c in levelsAvgList[level].clusters) {
+      let td = $('<td class="freq" title="Cluster ' + c + ' ' + _attr + '=' + level + ' Freq." ' 
+              + 'data-ori-value="' + levelsAvgList[level].clusters[c] + '">'
+              + _float_to_fixed(levelsAvgList[level].clusters[c], _to_fixed) + '</td>')
+      
+      let p = levelsAvgList[level].clusters[c] / cluter_count[c]
+      td.attr('data-prop', p)
+      if (p > pAvg) {
+        td.addClass('small')
+      }
+      else if (p < pAvg) {
+        td.addClass('large')
+      }
+      if (pMax && pMin && pMax > pMin) {
+        if (p === pMax) {
+          td.addClass('smallest')
+        }
+        else if (p === pMin) {
+          td.addClass('largest')
+        }
+      }
+      tr.append(td);
     }
     
     trList.push(tr)
@@ -66,14 +98,45 @@ let nominal_to_binary_tr_list = function (_attr, _full_data_attr, _clusters_data
   // ------------------------------
   
   let entropyTr = $('<tr class="entropy-tr"></tr>')
-    
+  
   entropyTr.append('<th>var' + _a + ': ' + _attr + ' (Entropy)</th>')
-  entropyTr.append('<td class="fulldata entropy" title="' + _title_prefix + ' Entropy" data-ori-value="' + fullDataEntropy + '">'
+  entropyTr.append('<td class="fulldata entropy" title="' + _title_prefix + ' Entropy" '
+    + 'data-ori-value="' + fullDataEntropy + '">'
             + _float_to_fixed(fullDataEntropy, _to_fixed) + '</td>');
 
+  let eMax
+  let eMin
   for (let c in clusterEntropy) {
-    entropyTr.append('<td class="entropy" title="Cluster ' + c + ' ' + _attr + ' Entropy" data-ori-value="' + clusterEntropy[c] + '">'
-            + _float_to_fixed(clusterEntropy[c], _to_fixed) + '</td>');
+    let e = clusterEntropy[c]
+    if (!eMax || e > eMax) {
+      eMax = e
+    }
+    if (!eMin || e < eMin) {
+      eMin = e
+    }
+  }
+
+  for (let c in clusterEntropy) {
+    let td = $('<td class="entropy" title="Cluster ' + c + ' ' + _attr + ' Entropy" data-ori-value="' + clusterEntropy[c] + '">'
+            + _float_to_fixed(clusterEntropy[c], _to_fixed) + '</td>')
+    let e = clusterEntropy[c]
+    /*
+    if (e > fullDataEntropy) {
+      td.addClass('large')
+    }
+    else if (e < fullDataEntropy) {
+      td.addClass('small')
+    }
+    if (eMax && eMin && eMax > eMin) {
+      if (e === eMax) {
+        td.addClass('largest')
+      }
+      else if (e === eMin) {
+        td.addClass('smallest')
+      }
+    }
+    */
+    entropyTr.append(td)
   }
 
   trList.push(entropyTr)

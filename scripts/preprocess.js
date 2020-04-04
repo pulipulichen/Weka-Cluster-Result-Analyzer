@@ -37,7 +37,7 @@ let _process_file_in_arff = function (_input) {
     _pos = _input.indexOf("@data") - 1;
   }
   var _result;
-  var _arff_mode = true;
+  //var _arff_mode = true;
   if (_pos > -1) {
     _result = _input.substring(_pos + _needle.length, _input.length).trim();
   }

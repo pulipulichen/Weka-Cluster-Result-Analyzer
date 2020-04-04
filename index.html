@@ -18,6 +18,9 @@
     <script src="vendors/jquery/jquery.min.js"></script>
     <script src="vendors/semantic-ui/semantic.min.js"></script>
     <script src="vendors/clipboard/clipboard.min.js"></script>
+    
+    <script src="vendors/js-xlsx/shim.js"></script>
+    <script src="vendors/js-xlsx/xlsx.full.min.js"></script>
 
     <script src="scripts/i18n-dict.js"></script>
     <script src="scripts/array-utils.js"></script>
@@ -79,23 +82,31 @@
             <div class="ui bottom attached active tab segment" data-tab="file">
               <div class="field">
                 <label for="files">
-                  請選擇分群完成的ARFF或CSV檔案，須為UTF8編碼，必須要有Cluster欄位: (<a href="data-iris.csv">範例資料下載</a>)
+                  請選擇分群完成的
+                  <a href="https://www.itread01.com/content/1548392048.html" target="_blank">ARFF格式</a>、
+                  <a href="https://zh.wikipedia.org/wiki/%E9%80%97%E5%8F%B7%E5%88%86%E9%9A%94%E5%80%BC?oldformat=true" target="_blank">CSV格式</a>、或是
+                  <a href="https://zh.wikipedia.org/zh-tw/%E5%BC%80%E6%94%BE%E6%96%87%E6%A1%A3%E6%A0%BC%E5%BC%8F?oldformat=true" target="_blank">ODS格式</a>
+                  的檔案，須為UTF8編碼，必須要有Cluster欄位: 
+                  (<a href="data-iris.ods">範例資料下載</a>)
                   <!-- Please select a ARFF file in UTF8 encoding: -->
                 </label>
               </div>
               <div class="field">
                 <input class="myfile" name="files[]" id="files" multiple="" type="file" />
                 <div class="ui pointing inverted blue large basic label">
-                  <a href="http://blog.pulipuli.info/2016/12/utf-8notepad-how-to-convert-plain-text.html" target="notepad" style="display: block">How to Convert ARFF file to UTF8 encoding?</a>
+                  <a href="http://blog.pulipuli.info/2016/12/utf-8notepad-how-to-convert-plain-text.html" 
+                     target="notepad" style="display: block">
+                    How to Convert CSV or ARFF file to UTF8 encoding?
+                  </a>
                 </div>
               </div>
 
-
+              <!--
               <div class="inline field">
                 <input type="checkbox" name="autodownload" id="autodownload" />
                 <label for="autodownload">Download Processed File Automatically</label>
               </div>
-
+              -->
 
             </div> <!-- <div class="ui bottom attached tab segment" data-tab="file"> -->
 

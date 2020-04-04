@@ -106,13 +106,6 @@ body {
   font-weight: bold;
 }
 
-.stat-result-abstract span.largest {
-    color: green;
-}
-
-.stat-result-abstract span.smallest {
-    color: red;
-}
 
 .stat-result td {
   text-align:right;
@@ -146,23 +139,6 @@ body {
 
 label {
   font-weight: bold;
-}
-
-.stat-result-abstract tbody td {
-  vertical-align: top;
-}
-
-.stat-result-abstract tbody td > div {
-  max-height: 40vh;
-  overflow-y: auto;
-}
-
-.stat-result-abstract tbody tr.good th {
-  background-color: #DEEBD6;
-}
-
-.stat-result-abstract tbody tr.bad th {
-  background-color: #F7CFCE;
 }
 
 #decimal_places {

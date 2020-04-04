@@ -1,4 +1,3 @@
-
 /* global DICT */
 
 var _draw_stat_abs_table = function () {
@@ -14,7 +13,9 @@ var _draw_stat_abs_table = function () {
 
   // -------------------
   var _good = [];
+  var _best = []
   var _bad = [];
+  var _worst = []
 
   // -------------------
   var _avg_tr_list = _stat_table.find("tbody tr.compare-data");
@@ -23,7 +24,9 @@ var _draw_stat_abs_table = function () {
     if (_attr.indexOf("(Avg.)") > -1) {
       _attr = _attr.substr(0, _attr.length - 7).trim();
     }
-    var _td_list = _avg_tr_list.eq(_r).find("td:not(.sse):not(.freq-list)");
+    //console.log(_attr)
+    //var _td_list = _avg_tr_list.eq(_r).find("td:not(.sse):not(.freq-list)");
+    var _td_list = _avg_tr_list.eq(_r).find("td:not(.sse):not(.prop-list)")
     for (var _d = 1; _d < _td_list.length; _d++) {
       var _cluster = _d - 1;
 
@@ -40,10 +43,16 @@ var _draw_stat_abs_table = function () {
       if (typeof (_bad[_cluster]) === "undefined") {
         _bad[_cluster] = [];
       }
+      if (typeof (_best[_cluster]) === "undefined") {
+        _best[_cluster] = [];
+      }
+      if (typeof (_worst[_cluster]) === "undefined") {
+        _worst[_cluster] = [];
+      }
 
       var _set_attr = _attr;
       var _td = _td_list.eq(_d);
-      if (_td.hasClass("freq")) {
+      if (_td.hasClass("prop")) {
         continue;
       }
 
@@ -59,10 +68,16 @@ var _draw_stat_abs_table = function () {
 
       _set_attr = `<span data-avg="${_avg}">${_set_attr}</span>`
 
-      if (_td.hasClass("small") || _td.hasClass("x-small") || _td.hasClass("xx-small")) {
+      if (_td.hasClass('smallest')) {
+        _worst[_cluster].push(_set_attr)
+      }
+      else if (_td.hasClass('largest')) {
+        _best[_cluster].push(_set_attr)
+      }
+      else if (_td.hasClass("small") || _td.hasClass("x-small") || _td.hasClass("xx-small")) {
         _bad[_cluster].push(_set_attr);
       }
-      if (_td.hasClass("large") || _td.hasClass("x-large") || _td.hasClass("xx-large")) {
+      else if (_td.hasClass("large") || _td.hasClass("x-large") || _td.hasClass("xx-large")) {
         _good[_cluster].push(_set_attr);
       }
     }
@@ -82,6 +97,20 @@ var _draw_stat_abs_table = function () {
   for (var _i = 0; _i < _bad.length; _i++) {
     var _value = _bad[_i].join("<br />");
     _bad_tr.append('<td><div>' + _value + '</div></td>');
+  }
+  
+  var _worst_tr = _abs_table.find("tr.worst").empty();
+  _worst_tr.append("<th>" + DICT["Smallest"] + "</th>");
+  for (var _i = 0; _i < _worst.length; _i++) {
+    var _value = _worst[_i].join("<br />");
+    _worst_tr.append('<td><div>' + _value + '</div></td>');
+  }
+  
+  var _best_tr = _abs_table.find("tr.best").empty();
+  _best_tr.append("<th>" + DICT["Largest"] + "</th>");
+  for (var _i = 0; _i < _best.length; _i++) {
+    var _value = _best[_i].join("<br />");
+    _best_tr.append('<td><div>' + _value + '</div></td>');
   }
 
   //setTimeout(() => {

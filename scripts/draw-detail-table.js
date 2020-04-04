@@ -143,8 +143,9 @@ var _draw_stat_table = function (_result) {
       //console.log(_full_data_attr);
       //console.log(_calc_mode(_full_data_attr));
       var _freq_data = _calc_mode(_full_data_attr);
-      _avg_tr.append('<td class="fulldata prop" title="' + _title_prefix + ' Prop." data-ori-value="' + _freq_data.full + '"><div>'
+      _avg_tr.append('<td class="fulldata prop" title="' + _title_prefix + ' Prop."><div>'
               + _freq_data.full + '</div></td>');
+      _avg_tr.removeClass('compare-data')
     }
 
 
@@ -208,7 +209,7 @@ var _draw_stat_table = function (_result) {
         //console.log("cluster data不是陣列: " + _i + " - " + _attr);
         //console.log(_attr_data);
         var _freq_data = _calc_mode(_attr_data);
-        _avg_tr.append('<td class="mark prop ' + _classname + '" title="' + _title_prefix + ' Prop." data-ori-value="' + _freq_data.full + '"><div>'
+        _avg_tr.append('<td class="mark prop ' + _classname + '" title="' + _title_prefix + ' Prop."><div>'
                 + _freq_data.full
                 + '</div></td>');
         
@@ -393,4 +394,46 @@ let remove_unknown_cat = function (_attr_levels) {
   //console.log(_attr_levels)
   
   return _attr_levels
+}
+
+
+var _calc_mode = function (_json) {
+  var _array_json = [];
+
+  var _sum = 0;
+  for (var _key in _json) {
+    _array_json.push({
+      "key": _key,
+      "value": _json[_key]
+    });
+    _sum = _sum + _json[_key];
+  }
+
+  _array_json = _array_json.sort(function (_a, _b) {
+    return (_b.value - _a.value);
+  });
+
+  //console.log(_array_json);
+  var _top_result = [];
+  var _full_result = [];
+  for (var _i = 0; _i < _array_json.length; _i++) {
+    var _value = parseInt(_array_json[_i].value / _sum * 100, 10) + "%";
+    var _data = "<tr><td class='prop-list'>" + _array_json[_i].key + "</td><td class='prop-list' freq-count='" + _array_json[_i].value + "'>" + _value + "</td></tr>";
+    if (_i < 5) {
+      _top_result.push(_data);
+    }
+    _full_result.push(_data);
+  }
+  if (_array_json.length > 5) {
+    _top_result.push("...");
+  }
+
+  var _full = "<table><tbody>" + _full_result.join('') + "</tbody></table>";
+
+  var _result = {
+    top: _top_result.join("<br />\n"),
+    full: _full
+  };
+
+  return _result;
 }

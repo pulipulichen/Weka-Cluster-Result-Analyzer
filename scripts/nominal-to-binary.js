@@ -48,7 +48,7 @@ let nominal_to_binary_tr_list = function (_attr, _full_data_attr, _clusters_data
   _to_fixed = parseInt(_to_fixed, 10);
   
   levels.forEach(function(level) {
-    let tr = $('<tr class="freq-tr"></tr>')
+    let tr = $('<tr class="freq-tr compare-data"></tr>')
     
     let pAvg = levelsAvgList[level].full_data / full_count
     tr.append('<th>var' + _a + ': ' + _attr + '=' + level.trim() + ' </th>')

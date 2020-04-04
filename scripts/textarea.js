@@ -79,29 +79,7 @@ var _load_file = function (evt) {
     //document.forms['myform'].elements['text'].value = evt.target.result;
     _result = evt.target.result
 
-    //console.log(type)
-    if (type === 'application/vnd.oasis.opendocument.spreadsheet'
-            || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      console.log('ods')
-      try {
-        let retcsv = readxlsx(_result)
-        console.log(retcsv)
-        _result = retcsv[2]
-      } catch (e) {
-        alert(e)
-        $('body').removeClass('loading')
-      }
-      //return false
-    }
-
-    //console.log(evt.target.files[0].type)
-    //if ()
-
-    try {
-      _send_to_process_file(_result, _file_name)
-    } catch (e) {
-      $('body').removeClass('loading')
-    }
+    _process_file_object(_result, _file_name, type)
   };
 
 
@@ -111,6 +89,51 @@ var _load_file = function (evt) {
     reader.readAsBinaryString(evt.target.files[0])
   } else {
     reader.readAsText(evt.target.files[0])
+  }
+}
+
+let _build_file_name = function (_file) {
+  var _file_name = _file.name;
+  var _pos = _file_name.lastIndexOf(".");
+  _file_name = _file_name.substr(0, _pos)
+          + _output_filename_surffix
+          + _file_name.substring(_pos, _file_name.length);
+  _file_name = _file_name + _output_filename_ext;
+  
+  return _file_name
+}
+
+let _process_file_object = function (_result, _file_name, type) {
+  //console.log(type)
+  
+  if (!_file_name) {
+    _file_name = _build_file_name(_result)
+  }
+  if (!type) {
+    type = _result.type
+  }
+  
+  if (type === 'application/vnd.oasis.opendocument.spreadsheet'
+          || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    //console.log('ods')
+    try {
+      let retcsv = readxlsx(_result)
+      //console.log(retcsv)
+      _result = retcsv[2]
+    } catch (e) {
+      alert(e)
+      $('body').removeClass('loading')
+    }
+    //return false
+  }
+
+  //console.log(evt.target.files[0].type)
+  //if ()
+
+  try {
+    _send_to_process_file(_result, _file_name)
+  } catch (e) {
+    $('body').removeClass('loading')
   }
 }
 

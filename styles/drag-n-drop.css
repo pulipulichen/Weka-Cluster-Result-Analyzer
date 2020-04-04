@@ -1,10 +1,22 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Apr 4, 2020, 8:39:15 PM
-    Author     : pudding
-*/
+body.dragover .drag-n-drop-model {
+  display: block;
+}
 
+.drag-n-drop-model {
+  display: none;
+  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100vw - 1.4rem);
+  height: 100vh;
+  
+  font-size: 3rem;
+  text-align: center;
+  padding-top: calc(50vh - 1.5rem);
+  
+  background-color: rgba(255,255,255, 0.8);
+  color: black;
+  
+  border: 0.4rem dotted rgba(0,0,0,0.5);
+}

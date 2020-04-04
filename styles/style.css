@@ -1,6 +1,7 @@
 body {
   padding: 1em !important; 
 }
+
 .file-process-framework .loading.hide {
   display:none;
 }
@@ -35,102 +36,7 @@ body {
   min-height: 0 !important;
 }
 
-.stat-result-container {
-  overflow: auto;
-  padding: 5px;
-  
-  max-height: 100vh;
-  max-width: 80vw;
-  display: inline-block;
-}
 
-.stat-result td.large {
-  background-color:#007F08;
-  color: white;
-}
-.stat-result td.x-large {
-  background-color:#00FF10;
-  color: white;
-  font-weight: bold;
-}
-.stat-result td.xx-large {
-  background-color:#4CFF58;
-  color: white;
-  font-weight: bold;
-}
-
-.stat-result td.small {
-  background-color:#7F130A;
-  color: white;
-}
-.stat-result td.prop {
-  
-    background-color:initial !important;
-    color: initial;
-}
-
-.stat-result td.prop div {
-    text-align: left;
-    overflow-y: auto;
-    max-height: 10em;
-}
-
-.stat-result td.prop div table {
-  width: 100%;
-}
-
-.stat-result td.x-small {
-  background-color:#FF2614;
-  color: white;
-  font-weight: bold;
-}
-.stat-result td.xx-small {
-  background-color:#FF6D60;
-  color: white;
-  font-weight: bold;
-}
-
-.stat-result td.smallest {
-  border: 3px solid #FF6D60;
-  color: yellow;
-  font-weight: bold;
-}
-
-.stat-result td.checkbox {
-    text-align: center;
-}
-
-.stat-result td.largest {
-  border: 3px solid #4CFF58;
-  color: yellow;
-  font-weight: bold;
-}
-
-
-.stat-result td {
-  text-align:right;
-}
-.stat-result tbody th {
-  text-align: right;
-}
-
-.stat-result-abstract th,
-.stat-result-abstract td,
-.stat-result th,
-.stat-result td {
-  padding: 5px;
-  vertical-align: top;
-}
-
-.stat-result td.fulldata {
-  color: gray;
-}
-
-.display-result {
-  /*overflow-y: auto;
-  max-height: calc(100vh - 30px);*/
-  
-}
 .input-mode.textarea {
   height: calc(100vh - 207px) !important;
   max-height: 100vh !important;
@@ -143,23 +49,4 @@ label {
 
 #decimal_places {
     width: 5em;
-}
-
-body.loading .loading-model {
-  display: block !important;
-}
-
-.loading-model {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.5);
-  color: white;
-  font-size: 36pt;
-  text-align: center;
-  padding: 5em;
-  cursor: wait;
-  display: none;
 }

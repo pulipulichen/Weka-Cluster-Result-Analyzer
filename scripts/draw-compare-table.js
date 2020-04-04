@@ -86,31 +86,67 @@ var _draw_stat_abs_table = function () {
   // ----------------------------------------
 
   var _good_tr = _abs_table.find("tr.good").empty();
-  _good_tr.append("<th>" + DICT["Larger than Avg."] + "</th>");
+  let _good_th = $("<th>" + DICT["Larger than Avg."] + "</th>")
+          .css({
+            'background-color': '#DEEBD6'
+          })
+  _good_tr.append(_good_th);
   for (var _i = 0; _i < _good.length; _i++) {
     var _value = _good[_i].join("<br />");
-    _good_tr.append('<td><div>' + _value + '</div></td>');
+    let td = $('<td><div>' + _value + '</div></td>')
+            .css({
+              'vertical-align': 'top'
+            })
+    _good_tr.append(td);
   }
 
   var _bad_tr = _abs_table.find("tr.bad").empty();
-  _bad_tr.append("<th>" + DICT["Smaller than Avg."] + "</th>");
+  let _bad_th = $("<th>" + DICT["Smaller than Avg."] + "</th>")
+          .css({
+            'background-color': '#F7CFCE'
+          })
+  _bad_tr.append(_bad_th);
   for (var _i = 0; _i < _bad.length; _i++) {
     var _value = _bad[_i].join("<br />");
-    _bad_tr.append('<td><div>' + _value + '</div></td>');
+    let td = $('<td><div>' + _value + '</div></td>')
+            .css({
+              'vertical-align': 'top'
+            })
+    _bad_tr.append(td);
   }
   
   var _worst_tr = _abs_table.find("tr.worst").empty();
-  _worst_tr.append("<th>" + DICT["Smallest"] + "</th>");
+  let _worst_th = $("<th>" + DICT["Smallest"] + "</th>")
+          .css({
+            'background-color': '#F7CFCE',
+            'color': 'red'
+          })
+  _worst_tr.append(_worst_th);
   for (var _i = 0; _i < _worst.length; _i++) {
     var _value = _worst[_i].join("<br />");
-    _worst_tr.append('<td><div>' + _value + '</div></td>');
+    let td = $('<td><div>' + _value + '</div></td>')
+            .css({
+              color: 'red',
+              'vertical-align': 'top'
+            })
+    _worst_tr.append(td);
   }
   
   var _best_tr = _abs_table.find("tr.best").empty();
-  _best_tr.append("<th>" + DICT["Largest"] + "</th>");
+  let _best_th = $("<th>" + DICT["Largest"] + "</th>")
+          .css({
+            'background-color': '#DEEBD6',
+            'color': 'green'
+          })
+  _best_tr.append(_best_th);
   for (var _i = 0; _i < _best.length; _i++) {
     var _value = _best[_i].join("<br />");
-    _best_tr.append('<td><div>' + _value + '</div></td>');
+    let td = $('<td><div>' + _value + '</div></td>')
+            .css({
+              color: 'green',
+              'vertical-align': 'top'
+            })
+    _best_tr.append(td)
   }
 
   //setTimeout(() => {

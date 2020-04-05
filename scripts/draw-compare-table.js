@@ -55,9 +55,13 @@ var _draw_stat_abs_table = function () {
       if (_td.hasClass("prop")) {
         continue;
       }
+      
+      if (_set_attr.startsWith('var')) {
+        _set_attr = _set_attr.slice(3)
+      }
 
       if (_td.hasClass("smallest") || _td.hasClass("largest")) {
-        _set_attr = _set_attr + "*";
+        //_set_attr = _set_attr + "*";
       }
       if (_td.hasClass("smallest")) {
         _set_attr = '<span class="smallest">' + _set_attr + '</span>';

@@ -13,7 +13,7 @@
 }
 
 .stat-result-abstract tbody td > div {
-  max-height: 40vh;
+  max-height: 7rem;
   overflow-y: auto;
 }
 

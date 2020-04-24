@@ -27,7 +27,7 @@ var _change_sse = function () {
   _calc_cluster_score();
 };
 
-var _change_to_fixed = function () {
+var _change_to_fixed = async function () {
   var _to_fixed = $("#decimal_places").val();
   _to_fixed = parseInt(_to_fixed, 10);
 
@@ -38,5 +38,7 @@ var _change_to_fixed = function () {
     _value = parseFloat(_value, 10);
     _value = _float_to_fixed(_value, _to_fixed);
     _td.text(_value);
+    
+    await sleep()
   }
 };

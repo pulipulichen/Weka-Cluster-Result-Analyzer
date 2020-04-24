@@ -13,7 +13,7 @@ var TO_FIXED;
 
 // ---------------------
 
-var _calc_cluster_score = function () {
+var _calc_cluster_score = async function () {
   // https://www.quora.com/How-can-we-choose-a-good-K-for-K-means-clustering
   var _full_data = FULL_DATA;
   var _cluster_data = CLUSTER_DATA;
@@ -36,13 +36,17 @@ var _calc_cluster_score = function () {
     if (_is_array(_full_data_attr) === true) {
       // 如果是數字
       //console.log(_cluster_data_attr);
-      _attr_sse = _attr_sse + _calc_cluster_score_numeric(_full_data_attr, _cluster_data_attr);
+      let score = await _calc_cluster_score_numeric(_full_data_attr, _cluster_data_attr)
+      _attr_sse = _attr_sse + score
     } else {
       // 如果是類別
       //console.log(_attr);
-      _attr_sse = _attr_sse + _calc_cluster_score_nominal(_full_data_attr, _cluster_data_attr);
+      let score = await _calc_cluster_score_nominal(_full_data_attr, _cluster_data_attr)
+      _attr_sse = _attr_sse + score;
       // 2.322701673495139
     }
+    
+    await sleep()
   }
 
   var _result = _attr_sse;
@@ -51,7 +55,7 @@ var _calc_cluster_score = function () {
           .html(_result);
 };
 
-var _calc_cluster_score_numeric = function (_full_data_attr, _cluster_data_attr) {
+var _calc_cluster_score_numeric = async function (_full_data_attr, _cluster_data_attr) {
   var _max = arrayMax(_full_data_attr);
   var _min = arrayMin(_full_data_attr);
 
@@ -64,13 +68,15 @@ var _calc_cluster_score_numeric = function (_full_data_attr, _cluster_data_attr)
       var _data = _cluster_data_attr[_i][_j];
       _data = _normalize_numeric_data(_data, _max, _min);
       _sse = _sse + (_center - _data) * (_center - _data);
+      
+      await sleep()
     }
   }
 
   return _sse;
 };
 
-var _calc_cluster_score_nominal = function (_full_data_attr, _cluster_data) {
+var _calc_cluster_score_nominal = async function (_full_data_attr, _cluster_data) {
   var _total_sse = 0;
 
   // A: 5
@@ -98,6 +104,8 @@ var _calc_cluster_score_nominal = function (_full_data_attr, _cluster_data) {
       //console.log([_i, _cate, _total_count, _count]);
       //console.log([_avg, _sse]);
       _total_sse = _total_sse + _sse;
+      
+      await sleep()
     }
   }
   return _total_sse;

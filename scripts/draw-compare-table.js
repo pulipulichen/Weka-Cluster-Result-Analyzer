@@ -1,6 +1,6 @@
 /* global DICT */
 
-var _draw_stat_abs_table = function () {
+var _draw_stat_abs_table = async function () {
   var _stat_table = $(".stat-result");
   var _abs_table = $(".stat-result-abstract");
 
@@ -84,8 +84,10 @@ var _draw_stat_abs_table = function () {
       else if (_td.hasClass("large") || _td.hasClass("x-large") || _td.hasClass("xx-large")) {
         _good[_cluster].push(_set_attr);
       }
-    }
-  }
+      
+      await sleep()
+    } // for (var _d = 1; _d < _td_list.length; _d++) {
+  } // for (var _r = 0; _r < _avg_tr_list.length; _r++) {
 
   // ----------------------------------------
 
@@ -102,6 +104,7 @@ var _draw_stat_abs_table = function () {
               'vertical-align': 'top'
             })
     _good_tr.append(td);
+    await sleep()
   }
 
   var _bad_tr = _abs_table.find("tr.bad").empty();
@@ -117,6 +120,7 @@ var _draw_stat_abs_table = function () {
               'vertical-align': 'top'
             })
     _bad_tr.append(td);
+    await sleep()
   }
   
   var _worst_tr = _abs_table.find("tr.worst").empty();
@@ -134,6 +138,7 @@ var _draw_stat_abs_table = function () {
               'vertical-align': 'top'
             })
     _worst_tr.append(td);
+    await sleep()
   }
   
   var _best_tr = _abs_table.find("tr.best").empty();
@@ -151,6 +156,7 @@ var _draw_stat_abs_table = function () {
               'vertical-align': 'top'
             })
     _best_tr.append(td)
+    await sleep()
   }
 
   //setTimeout(() => {

@@ -1,5 +1,5 @@
 
-var _process_file = function (_input, _callback) {
+var _process_file = async function (_input, _callback) {
 
   //------------------
 
@@ -12,12 +12,12 @@ var _process_file = function (_input, _callback) {
   let _result
   if (_input.indexOf("\n@data\n") > -1
           || _input.indexOf("@data") > -1) {
-    _result = _process_file_in_arff(_input)
+    _result = await _process_file_in_arff(_input)
   } else {
-    _result = _process_file_in_csv(_input)
+    _result = await _process_file_in_csv(_input)
   }
 
-  _draw_stat_table(_result);
+  await _draw_stat_table(_result);
 
   if (typeof (_callback) === "function") {
     _callback(_result);
@@ -25,7 +25,7 @@ var _process_file = function (_input, _callback) {
 
 }
 
-let _process_file_in_arff = function (_input) {
+let _process_file_in_arff = async function (_input) {
 
   //_input = _input.replace(new RegExp("\''", 'g'), "");
   //console.log(_input);
@@ -57,6 +57,8 @@ let _process_file_in_arff = function (_input) {
       var _values = _fields[2].slice(1, -1).split(',')
       _attr_values.push(_values)
     }
+    
+    await sleep()
   }
   //console.log(_attr_list);
 
@@ -89,7 +91,7 @@ let _process_file_in_arff = function (_input) {
 }
 
 
-let _process_file_in_csv = function (_input) {
+let _process_file_in_csv = async function (_input) {
   let _result = _input.substring(_input.indexOf("\n") + 1, _input.length).trim();
 
   var _attr_line = _input.substr(0, _input.indexOf("\n")).trim();

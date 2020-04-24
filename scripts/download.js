@@ -33,7 +33,7 @@ var _download_file_button = function () {
 };
 
 
-var _download_numeric_variables_button = function () {
+var _download_numeric_variables_button = async function () {
   var _panel = $(".file-process-framework");
 
   var _file_name = _panel.find(".filename").val().trim();
@@ -63,6 +63,8 @@ var _download_numeric_variables_button = function () {
         _fields_value[_j] = [];
       }
       _fields_value[_j][(_i - 1)] = _value;
+      
+      await sleep()
     }
   }
 
@@ -85,6 +87,7 @@ var _download_numeric_variables_button = function () {
 
       _line.push(_name);
     }
+    await sleep()
   }
   _data.push(_line.join(","));
 
@@ -112,7 +115,8 @@ var _download_numeric_variables_button = function () {
 
         _line.push(_value);
       }
-    }
+      await sleep()
+    } // for (var _j = 0; _j < _fields_type.length; _j++) {
 
     if (_lost_data === false) {
       _data.push(_line.join(","));
@@ -143,7 +147,7 @@ var _download_cluster_file_button = function () {
 
 // ------------------------
 
-var _download_contingency_table_button = function (_btn) {
+var _download_contingency_table_button = async function (_btn) {
   _btn = $(_btn);
   var _tr = _btn.parents("tr:first");
   var _name = _tr.find("th .name").text().trim();
@@ -179,6 +183,8 @@ var _download_contingency_table_button = function (_btn) {
       }
     });
     _data['cluster' + _i] = _d;
+    
+    await sleep()
   }
 
   var _csv = [];
@@ -202,6 +208,8 @@ var _download_contingency_table_button = function (_btn) {
     }
 
     _csv.push(_line.join(","));
+    
+    await sleep()
   }
 
   _csv = _csv.join("\n");

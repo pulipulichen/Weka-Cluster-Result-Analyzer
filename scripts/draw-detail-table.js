@@ -4,7 +4,7 @@
  * 繪製統計表格
  * @param {String} _result
  */
-var _draw_stat_table = function (_result) {
+var _draw_stat_table = async function (_result) {
   // ---------------------------
   // 讀取資料
   //var _lines = _result.split("\n");
@@ -45,6 +45,8 @@ var _draw_stat_table = function (_result) {
             + '<br /><button type="button" onclick="TagCloud.donwload(this, ' + _i + ', ' + _cluster_count[_i] + ')">下載</button>'
             + ' </th>');
     // <button type="button" onclick="TagCloud.donwload(this, ' + _i + ', ' + count + ')">下載</button>
+    
+    await sleep()
   }
   //_thead.append('<th>' +    DICT['SSE_TH'] + '</th>');
 
@@ -74,6 +76,8 @@ var _draw_stat_table = function (_result) {
     }
     _count_tr.append('<td class="marks count ' + _classname + '" title="Cluster ' + _i + ', count" data-ori-value="' + _cluster_count[_i] + '">'
             + _cluster_count[_i] + '</td>');
+    
+    await sleep()
   }
   //_count_tr.append('<td></td>');
 
@@ -245,6 +249,8 @@ var _draw_stat_table = function (_result) {
       })
       
     }
+    
+    await sleep()
   } // for (var _a = _start; _a < _attr_list.length - 1; _a++) {
 
   _change_show_fulldata();
@@ -252,7 +258,7 @@ var _draw_stat_table = function (_result) {
 
   // ---------------------
 
-  _draw_stat_abs_table();
+  await _draw_stat_abs_table();
 
   FULL_DATA = _full_data;
   CLUSTER_DATA = _cluster_data;

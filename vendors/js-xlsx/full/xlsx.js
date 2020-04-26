@@ -3058,7 +3058,7 @@ var utf8readAsync = async function utf8reada(orig) {
     
     if (i % waitInterval === 0) {
       //console.log(typeof($))
-      console.log('utf8readAsync', i, parseInt((i / orig.length) * 100) )
+      console.log('utf8readAsync', i, parseInt((i / orig.length) * 100), orig.length )
       //if (i < 150000000) {
         await JSXLSXsleep()
       //}
@@ -20174,29 +20174,29 @@ async function parse_odsAsync(zip, opts) {
 	opts = opts || ({});
 	var ods = !!safegetzipfile(zip, 'objectdata');
   
-  console.log('parse_odsAsync', 1)
+  //console.log('parse_odsAsync', 1)
   
 	if(ods) parse_manifest(getzipdata(zip, 'META-INF/manifest.xml'), opts);
   
-  console.log('parse_odsAsync', 11)
+  //console.log('parse_odsAsync', 11)
   
 	var content = await getzipstrAsync(zip, 'content.xml');
   
-  console.log('parse_odsAsync', 2)
+  //console.log('parse_odsAsync', 2)
   
 	if(!content) throw new Error("Missing content.xml in " + (ods ? "ODS" : "UOF")+ " file");
   //console.log(parse_content_xml)
   if (ods === false) {
-    console.log('parse_odsAsync', 25)
+    //console.log('parse_odsAsync', 25)
     content = await utf8readAsync(content)
   }
 	var wb = await parse_content_xml(content, opts, true);
   
-  console.log('parse_odsAsync', 3)
+  //console.log('parse_odsAsync', 3)
   
 	if(safegetzipfile(zip, 'meta.xml')) wb.Props = parse_core_props(getzipdata(zip, 'meta.xml'));
   
-  console.log('parse_odsAsync', 4)
+  //console.log('parse_odsAsync', 4)
   
 	return wb;
 }

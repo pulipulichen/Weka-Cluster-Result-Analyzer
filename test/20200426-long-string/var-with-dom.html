@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Save too long string to a variable with DOM caches</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <h1>Save too long string to a variable with DOM caches</h1>
+    <button type="button" id="start">START</button>
+    <span id="progress"></span>
+    <script>
+      var sleep = function () {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve(true)
+          }, 10)
+        })
+      }
+      
+      var main = async function () {
+        var out = ''
+        var cache
+        var cacheList = []
+        var progress = document.getElementById('progress')
+        
+        var limit = 347812747
+        for (var i = 0; i < limit; i++) {
+          if (i % 50000 === 0) {
+            console.log(i, parseInt(i / limit * 100))
+            progress.innerHTML = parseInt(i / limit * 100) + '%'
+            await sleep()
+          }
+          if (i % 10000000 === 0 && out !== '') {
+            //cache.value = cache.value + out
+            cache = document.createElement('textarea')
+            cache.value = out
+            cache.style.display = 'none'
+            document.body.appendChild(cache)
+            cacheList.push(cache)
+        
+            out = ''
+            console.log('cache', cacheList.length)
+          }
+
+          out += '-'
+        }
+        //cache.value = cache.value + out
+        
+        var tempOut = out
+        out = ''
+        
+        for (i = 0; i < cacheList.length; i++) {
+          out += cacheList[i].value
+          cacheList[i].remove()
+        }
+        out += tempOut
+        
+        document.write('Finish: ' + out.length)
+      }
+      
+      document.getElementById('start').addEventListener('click', main)
+      //main()
+    </script>
+  </body>
+</html>

@@ -208,7 +208,8 @@ let readxlsx = async function (inpdata) {
   //讀檔
   console.log('開始讀檔')
   try {
-    var workbook = XLSX.read(inpdata, {type: 'binary'});
+    var workbook = await XLSX.readAsync(inpdata, {type: 'binary'});
+    //var workbook = XLSX.read(inpdata, {type: 'binary'});
   }
   catch (e) {
     window.alert(e)

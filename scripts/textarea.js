@@ -50,7 +50,6 @@ var _load_file = function (evt) {
 
   $('body').addClass('loading')
 
-
   var _panel = $(".file-process-framework");
 
   _panel.find(".loading").removeClass("hide");

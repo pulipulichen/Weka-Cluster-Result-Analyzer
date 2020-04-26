@@ -2856,14 +2856,14 @@ function getzipstr(zip, file, safe) {
 
 async function getzipstrAsync(zip, file, safe) {
 	if(!safe) { 
-    console.log('getzipstrAsync', 1)
+    //console.log('getzipstrAsync', 1)
     return getdatastr(getzipfile(zip, file)); 
   }
 	if(!file) {
     return null;
   }
 	try { 
-    console.log('getzipstrAsync', 2)
+    //console.log('getzipstrAsync', 2)
     return getzipstr(zip, file); 
   } catch(e) { 
     return null; 
@@ -20710,11 +20710,11 @@ async function parse_zipAsync(zip, opts) {
 	opts = opts || {};
 	fix_read_opts(opts);
 
-  console.log('parse_zipAsync', 1)
+  //console.log('parse_zipAsync', 1)
 
 	/* OpenDocument Part 3 Section 2.2.1 OpenDocument Package */
 	if(safegetzipfile(zip, 'META-INF/manifest.xml')) {
-    console.log('parse_zipAsync', 12)
+    //console.log('parse_zipAsync', 12)
     return await parse_odsAsync(zip, opts);
   }
 	/* UOC */
@@ -20722,7 +20722,7 @@ async function parse_zipAsync(zip, opts) {
 	/* Numbers */
 	if(safegetzipfile(zip, 'Index/Document.iwa')) throw new Error('Unsupported NUMBERS file');
   
-  console.log('parse_zipAsync', 2)
+  //console.log('parse_zipAsync', 2)
 
 	var entries = zipentries(zip);
 	var dir = parse_ct((getzipstr(zip, '[Content_Types].xml')));
@@ -20740,7 +20740,7 @@ async function parse_zipAsync(zip, opts) {
 	}
 	if(dir.workbooks[0].slice(-3) == "bin") xlsb = true;
 
-  console.log('parse_zipAsync', 3)
+  //console.log('parse_zipAsync', 3)
 
 	var themes = ({});
 	var styles = ({});
@@ -20753,7 +20753,7 @@ async function parse_zipAsync(zip, opts) {
 		if(dir.style) styles = parse_sty(getzipdata(zip, strip_front_slash(dir.style)), dir.style, themes, opts);
 	}
 
-  console.log('parse_zipAsync', 4)
+  //console.log('parse_zipAsync', 4)
 
 	/*var externbooks = */dir.links.map(function(link) {
 		try {
@@ -20775,7 +20775,7 @@ async function parse_zipAsync(zip, opts) {
 		}
 	}
 
-  console.log('parse_zipAsync', 5)
+  //console.log('parse_zipAsync', 5)
 
 	var custprops = {};
 	if(!opts.bookSheets || opts.bookProps) {
@@ -20795,7 +20795,7 @@ async function parse_zipAsync(zip, opts) {
 	}
 	sheets = {};
 
-  console.log('parse_zipAsync', 6)
+  //console.log('parse_zipAsync', 6)
 
 	var deps = {};
 	if(opts.bookDeps && dir.calcchain) deps=parse_cc(getzipdata(zip, strip_front_slash(dir.calcchain)),dir.calcchain,opts);
@@ -20813,7 +20813,7 @@ async function parse_zipAsync(zip, opts) {
 		}
 	}
 
-  console.log('parse_zipAsync', 7)
+  //console.log('parse_zipAsync', 7)
 
 	var wbext = xlsb ? "bin" : "xml";
 	var wbrelsi = dir.workbooks[0].lastIndexOf("/");
@@ -20822,7 +20822,7 @@ async function parse_zipAsync(zip, opts) {
 	var wbrels = parse_rels(getzipstr(zip, wbrelsfile, true), wbrelsfile);
 	if(wbrels) wbrels = safe_parse_wbrels(wbrels, wb.Sheets);
 
-  console.log('parse_zipAsync', 8)
+  //console.log('parse_zipAsync', 8)
 
 	/* Numbers iOS hack */
 	var nmode = (getzipdata(zip,"xl/worksheets/sheet.xml",true))?1:0;
@@ -20853,7 +20853,7 @@ async function parse_zipAsync(zip, opts) {
 		safe_parse_sheet(zip, path, relsPath, props.SheetNames[i], i, sheetRels, sheets, stype, opts, wb, themes, styles);
 	}
   
-  console.log('parse_zipAsync', 9)
+  //console.log('parse_zipAsync', 9)
 
 	out = ({
 		Directory: dir,
@@ -20877,7 +20877,7 @@ async function parse_zipAsync(zip, opts) {
 		else if(dir.defaults && dir.defaults.bin === CT_VBA) out.vbaraw = getzipdata(zip, 'xl/vbaProject.bin',true);
 	}
   
-  console.log('parse_zipAsync', 10)
+  //console.log('parse_zipAsync', 10)
   
 	return out;
 }
@@ -21185,33 +21185,33 @@ async function readAsync(data, opts) {
 	}
 	switch((n = firstbyte(d, o))[0]) {
 		case 0xD0: 
-      console.log(1)
+      //console.log(1)
       return read_cfb(CFB.read(d, o), o);
 		case 0x09: 
-      console.log(2)
+      //console.log(2)
       if(n[1] <= 0x04) return parse_xlscfb(d, o); break;
 		case 0x3C: 
-      console.log(3)
+      //console.log(3)
       return parse_xlml(d, o);
 		case 0x49: 
-      console.log(4)
+      //console.log(4)
       if(n[1] === 0x44) return read_wb_ID(d, o); break;
 		case 0x54: 
-      console.log(5)
+      //console.log(5)
       if(n[1] === 0x41 && n[2] === 0x42 && n[3] === 0x4C) return DIF.to_workbook(d, o); break;
 		case 0x50: 
-      console.log(6)
+      //console.log(6)
       if (n[1] === 0x4B && n[2] < 0x09 && n[3] < 0x09) {
-        console.log(61)
+        //console.log(61)
         //return await read_zip(d, o)
         return await read_zipAsync(d, o)
       }
       else {
-        console.log(62)
+        //console.log(62)
         return read_prn(data, d, o, str)
       }
 		case 0xEF: 
-      console.log(7)
+      //console.log(7)
       return n[3] === 0x3C ? parse_xlml(d, o) : read_prn(data, d, o, str);
 		case 0xFF: if(n[1] === 0xFE) { return read_utf16(d, o); } break;
 		case 0x00: if(n[1] === 0x00 && n[2] >= 0x02 && n[3] === 0x00) return WK_.to_workbook(d, o); break;

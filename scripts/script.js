@@ -143,8 +143,13 @@ let setPreviewCluster = function (result) {
   result.slice(result.indexOf('\n') + 1).split('\n').forEach(line => {
     let fields = line.split(',')
     let cluster = fields[clusterFieldIndex]
-    if ((cluster.startsWith('"') && cluster.endsWith('"'))
-            || (cluster.startsWith("'") && cluster.endsWith("'"))) {
+    if (!cluster) {
+      console.error('cluster is not defined', fields.length, clusterFieldIndex, line)
+      return false
+    }
+    
+    if ((cluster && cluster.startsWith('"') && cluster.endsWith('"'))
+            || (cluster && cluster.startsWith("'") && cluster.endsWith("'"))) {
       cluster = cluster.slice(1, -1)
     }
 

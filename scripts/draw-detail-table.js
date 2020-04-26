@@ -269,8 +269,9 @@ var _draw_stat_table = async function (_result) {
 let parse_result_to_object = function (_result) {
   // ---------------------------
   // 讀取資料
+  //console.log(_result)
   var _lines = _result.split("\n");
-
+  //console.log(_lines[0])
   
   var _needle1 = "Instance_number";
   var _needle2 = "Cluster";
@@ -318,6 +319,16 @@ let parse_result_to_object = function (_result) {
         if (_attr === "Instance_number") {
           continue;
         }
+        
+        // 在這邊，做quote跟comma的判斷
+//        if (_value.startsWith('"') && _value.endsWith('"')) {
+//          _value = _value.slice(1, -1)
+//          
+//          if (_value.lastIndexOf(',') === _value.length - 3) {
+//            _value = _value.split(',').join('')
+//            _value = new Number(_value)
+//          }
+//        }
 
         // 判斷是否是數值
         if (isNaN(_value) === false) {

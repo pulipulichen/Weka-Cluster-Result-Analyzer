@@ -131,7 +131,7 @@ let _process_file_object = async function (_result, _file_name, type) {
     try {
       let retcsv = await readxlsx(_result)
       //console.log(retcsv)
-      _result = retcsv[2]
+      _result = retcsv
     } catch (e) {
       alert(e)
       $('body').removeClass('loading')
@@ -205,7 +205,7 @@ let readxlsx = async function (inpdata) {
 
 
   //讀檔
-  console.log('開始讀檔')
+  //console.log('開始讀檔')
   try {
     var workbook = await XLSX.readAsync(inpdata, {type: 'binary'});
     //var workbook = XLSX.read(inpdata, {type: 'binary'});
@@ -214,7 +214,7 @@ let readxlsx = async function (inpdata) {
     window.alert(e)
     return false
   }
-  console.log('讀檔完成')
+  //console.log('讀檔完成')
 
   //轉為json物件回傳
   return await to_csv(workbook);
@@ -226,14 +226,44 @@ let to_csv = async function (workbook) {
   for (let i in workbook.SheetNames) {
     let sheetName = workbook.SheetNames[i]
     
+    /*
     var csv = XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
     if (csv.length > 0) {
       result.push('SHEET: ' + sheetName);
       result.push('\n');
       result.push(csv);
     }
+    */
+    var json = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    var csv = []
+    var attrList
+    //csv.push('SHEET: ' + sheetName);
+    //csv.push('\n');
+    for (let j = 0; j < json.length; j++) {
+      if (j === 0) {
+        attrList = Object.keys(json[0])
+        csv.push(attrList.join(','))
+      }
+      
+      let valueList = attrList.map(function (key) {
+        return json[j][key]
+      })
+      csv.push(valueList.join(','))
+      
+      if (j % 1000 === 0) {
+        await sleep()
+      }
+    }
     
-    await sleep()
+    //csv = csv.join('\n').trim()
+    //console.log(csv)
+    //return csv
+//    console.log(csv.join('\n'))
+//    //await sleep()
+    return csv.join('\n')
   }
+  
+  
+  //console.log(result)
   return result;
 }

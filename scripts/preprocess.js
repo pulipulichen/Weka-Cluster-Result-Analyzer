@@ -16,7 +16,7 @@ var _process_file = async function (_input, _callback) {
   } else {
     _result = await _process_file_in_csv(_input)
   }
-
+  //console.log(_result)
   await _draw_stat_table(_result);
 
   if (typeof (_callback) === "function") {

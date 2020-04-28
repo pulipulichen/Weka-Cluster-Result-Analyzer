@@ -8,3 +8,6 @@ This is an HTML5 widget for display K-means cluster result from Weka.
 ICON: https://findicons.com/icon/180726/pie_chart_search
 
 http://localhost/projects-html5/Weka-Cluster-Result-Analyzer/
+
+https://pulipulichen.github.io/Weka-Cluster-Result-Analyzer/test/20200426-long-string/var.html
+http://localhost/projects-html5/Weka-Cluster-Result-Analyzer/test/20200426-long-string/var-with-dom.html

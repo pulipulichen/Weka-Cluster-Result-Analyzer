@@ -23,7 +23,8 @@ $(function () {
   // 20170108 測試用
   //$.get("data.csv", function (_data) {
   //$.get("data/data-work.csv", function (_data) {
-  $.get("data/data-missing.csv", function (_data) {
+  //$.get("data/data-missing.csv", function (_data) {
+  $.get("data/data-text-mining.csv", function (_data) {
     $("#input_mode_textarea").val(_data);
     $("#input_mode_textarea").keyup();
   });

@@ -16,4 +16,6 @@ body.loading .loading-model {
   padding: 5em;
   cursor: wait;
   display: none;
+  user-select: none;
+  user-drag: none;
 }

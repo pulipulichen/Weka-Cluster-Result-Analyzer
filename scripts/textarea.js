@@ -14,6 +14,7 @@ var _load_textarea = async function (evt) {
   // ---------------------------
 
   _panel.find(".loading").removeClass("hide");
+  $('body').addClass('loading')
 
   // ---------------------------
   var d = new Date();
@@ -38,6 +39,8 @@ var _load_textarea = async function (evt) {
     if (_auto_download === true) {
       _panel.find(".download-file").click();
     }
+    
+    $('body').removeClass('loading')
   }); // await _process_file(_result, function (_result) {
 };
 
@@ -151,7 +154,7 @@ let _process_file_object = async function (_result, _file_name, type) {
 
 let _send_to_process_file = function (_result, _file_name) {
   var _panel = $(".file-process-framework");
-  _process_file(_result, function (_result) {
+  _process_file(_result, async function (_result) {
     _panel.find(".preview").val(_result);
 
     setPreviewCluster(_result)
@@ -168,6 +171,7 @@ let _send_to_process_file = function (_result, _file_name) {
       _panel.find(".download-file").click();
     }
 
+    //console.log('完成了！')
     $('body').removeClass('loading')
 
     //_download_file(_result, _file_name, "txt");
